@@ -83,6 +83,17 @@
         
         
         /**
+        * @function stopSong
+        * @desc stops the song (currentBuzzObject) and sets the song.playing to null
+        * @param {object} song
+        */
+        var stopSong = function(song) {
+            currentBuzzObject.stop();
+            song.playing = null;
+        
+        };
+        
+        /**
         * @function SongPlayer.play
         * @desc public method used to play song (Currently used in the album.html template) 
         * @param {object} song
@@ -136,7 +147,24 @@
             }
         };
         
-        
+                /**
+        * @function SongPlayer.next
+        * @desc function for the next button on the player bar. Determines current song index,
+        * increments by one, and then plays the song at that index 
+        */
+        SongPlayer.next = function() {
+            var currentSongIndex = getSongIndex(SongPlayer.currentSong);
+            currentSongIndex++;
+            
+            if (currentSongIndex > currentAlbum.songs.length) {
+                stopSong(SongPlayer.currentSong);
+            } else {
+                var song = currentAlbum.songs[currentSongIndex];
+                setSong(song);
+                playSong(song);
+            }
+            
+        };
         
         /**The service (factory in this case) returns this object, making its 
         *properties and methods public to the rest of the application 
