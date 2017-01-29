@@ -25,7 +25,9 @@ var calculatePercent = function(seekBar, event) {
              templateUrl: '/templates/directives/seek_bar.html',
              replace: true,
              restrict: 'E',
-             scope: { },
+             scope: {
+                 onChange: '&'
+             },
              link: function(scope, element, attributes) {
              // directive logic to return
                  
@@ -43,6 +45,20 @@ var calculatePercent = function(seekBar, event) {
                  scope.max = 100;
                  
                  var seekBar = $(element);
+                 
+                 /**
+                * @desc This code observes the values of the attributes we declare in the HTML by specifying the attribute name in the first argument
+                * so when observed, we execute a callback to set the new scope value, to determine the location of the song and the playbck position.
+                * @type directive
+                */
+                 
+                 attributes.$observe('value', function(newValue) {
+                 scope.value = newValue;
+                 });
+ 
+                 attributes.$observe('max', function(newValue) {
+                 scope.max = newValue;
+                 });
  
                  
                 /**
@@ -81,6 +97,7 @@ var calculatePercent = function(seekBar, event) {
                  scope.onClickSeekBar = function(event) {
                     var percent = calculatePercent(seekBar, event);
                     scope.value = percent * scope.max;
+                    notifyOnChange(scope.value);
                 };
                  
                 /**
@@ -93,6 +110,7 @@ var calculatePercent = function(seekBar, event) {
                          var percent = calculatePercent(seekBar, event);
                          scope.$apply(function() {
                              scope.value = percent * scope.max;
+                             notifyOnChange(scope.value);
                          });
                      });
                      
@@ -101,6 +119,16 @@ var calculatePercent = function(seekBar, event) {
                          $document.unbind('mouseup.thumb');
                      });
                  };
+                 
+                    /**
+                    * @function notifyOnChange
+                    * @desc to notify onChange that scope.value has changed
+                    */ 
+                     var notifyOnChange = function(newValue) {
+                        if (typeof scope.onChange === 'function') {
+                            scope.onChange({value: newValue});
+                        }
+                     };
              }
          };
      }

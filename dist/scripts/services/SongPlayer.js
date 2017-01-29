@@ -25,7 +25,12 @@
         */
         SongPlayer.currentSong = null;
         
-                
+         /**
+         * @desc Current playback time (in seconds) of currently playing song
+         * @type {Number}
+         */
+         SongPlayer.currentTime = null;
+        
         /**
         * @desc Buzz object audio file
         * @type {object}
@@ -81,17 +86,6 @@
         
         };
         
-        
-        /**
-        * @function stopSong
-        * @desc stops the song (currentBuzzObject) and sets the song.playing to null
-        * @param {object} song
-        */
-        var stopSong = function(song) {
-            currentBuzzObject.stop();
-            song.playing = null;
-        
-        };
         
         /**
         * @function SongPlayer.play
@@ -164,6 +158,17 @@
                 playSong(song);
             }
             
+        };
+        
+        /**
+        * @function setCurrentTime
+        * @desc Set current time (in seconds) of currently playing song
+        * @param {Number} time
+        */
+        SongPlayer.setCurrentTime = function(time) {
+            if (currentBuzzObject) {
+                currentBuzzObject.setTime(time);
+            }
         };
         
         /**The service (factory in this case) returns this object, making its 
