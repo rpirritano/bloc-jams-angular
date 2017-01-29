@@ -31,6 +31,28 @@
          */
          SongPlayer.currentTime = null;
         
+         SongPlayer.max = 100;
+        
+        /**
+         * @desc Volume of currently playing song
+         * @type {Number}
+         */
+         SongPlayer.volume = null;
+        
+        
+        /**
+        * @function setVolume
+        * @desc Sets volume of currently playing song
+        * @param {Number} volume
+        */
+        SongPlayer.setVolume = function(volume) {
+            if (currentBuzzObject) {
+                currentBuzzObject.setVolume(volume);
+                SongPlayer.volume = volume;
+            }
+        }
+        
+        
         /**
         * @desc Buzz object audio file
         * @type {object}
@@ -170,6 +192,8 @@
                 currentBuzzObject.setTime(time);
             }
         };
+        
+
         
         /**The service (factory in this case) returns this object, making its 
         *properties and methods public to the rest of the application 
